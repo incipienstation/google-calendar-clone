@@ -58,9 +58,9 @@ const EventBox = ({
       onMouseDown={handleMouseDown}
       onContextMenu={(e) => e.preventDefault()}
       style={{
-        height: `${range.end - range.start}px`,
+        height: `${range.end - range.start - 1.5}px`,
         width: "90%",
-        top: `calc(${range.start}px - 0.5px)`,
+        top: `${range.start - 0.5}px`,
         left: "-0.5px",
         zIndex: "10",
       }}

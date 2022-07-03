@@ -37,23 +37,6 @@ const TimeColumn = ({ day }: { day: number }) => {
     .filter((date) => date.day === day)
     .at(0)!;
 
-  // const getRange = (event: Event) => {
-  //   const start: number = !selectedDateEquals(
-  //     event.dateTimeRange[0].date,
-  //     currDate
-  //   )
-  //     ? 0
-  //     : event.dateTimeRange[0].hour * 48 +
-  //       event.dateTimeRange[0].minute * (48 / 60);
-  //   const end: number = !selectedDateEquals(
-  //     event.dateTimeRange[1].date,
-  //     currDate
-  //   )
-  //     ? 48 * 24
-  //     : event.dateTimeRange[1].hour * 48 +
-  //       event.dateTimeRange[1].minute * (48 / 60);
-  //   return { start: start, end: end };
-  // };
   const getRange = (event: Event) => {
     const start: number =
       compareSelectedDate(event.dateTimeRange[0].date, currDate) < 0

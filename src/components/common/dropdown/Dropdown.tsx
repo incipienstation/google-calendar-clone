@@ -13,7 +13,16 @@ import {
   setDropdownType,
 } from "../../../features/timePickerControl/timePickerControlSlice";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
-import { setSelectedEventStart } from "../../../features/selectedEvent/selectedEventSlice";
+import {
+  addTimeInterval,
+  setSelectedEvent,
+  updateSelectedEvent,
+} from "../../../features/selectedEvent/selectedEventSlice";
+import {
+  parseDateToSelectedDate,
+  parseSelectedDateToDate,
+  SelectedDate,
+} from "../../../features/selectedDate/selectedDateSlice";
 
 const Dropdown = ({ type }: { type: DropdownType }) => {
   const { dropdownType } = useSelector(
@@ -24,7 +33,8 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
   const dateTime = type === "start" ? startDateTime : endDateTime;
   const dispatch = useDispatch();
   const ref: RefObject<HTMLDivElement> = useRef(null);
-  const [isClosable, setIsClosable] = useState(false);
+  const [isClosable, setIsClosable] = useState(true);
+  const [timeInterval, setTimeInterval] = useState(60);
 
   const handleClickOutside = () => {
     if (isClosable) {
@@ -38,32 +48,46 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
     dispatch(setDropdownType(type));
   };
 
-  const handleClickTime = (dateTime: DateTime) => {
-    console.log(dateTime);
-    dispatch(setSelectedEventStart(dateTime));
+  const handleClickTime = (dateTime: DateTime, minutes?: number) => {
+    if (minutes !== undefined) {
+      setTimeInterval(minutes);
+    }
+    dispatch(
+      updateSelectedEvent({
+        startDateTime: dateTime,
+        timeInterval: minutes ?? timeInterval,
+      })
+    );
     setIsClosable(true);
+    dispatch(closeDropdowns());
   };
 
   const timeIntervalToString = (minute: number): string => {
     return minute < 60 ? `(${minute}분)` : `(${minute / 60}시간)`;
   };
 
-  const addTime = () => {};
-
   const dropdownBuilder =
     dropdownType === type ? (
-      <div className="drop-down__body">
+      <div ref={ref} className="drop-down__body" >
         {Array(type === "start" ? 4 * 24 : 4 + 2 * 23)
           .fill(0)
           .map((v, i) =>
             type === "start" ? 15 * i : i < 4 ? 15 * i : 60 + 30 * (i - 4)
           )
           .map((v) => {
-            const tempDateTime = {
-              date: dateTime.date,
-              hour: Math.floor(v / 60),
-              minute: v % 60,
-            };
+            const tempDate: Date = addTimeInterval(startDateTime, v)
+            const tempDateTime: DateTime =
+              type === "start"
+                ? {
+                    date: dateTime.date,
+                    hour: Math.floor(v / 60),
+                    minute: v % 60,
+                  }
+                : {
+                    date: parseDateToSelectedDate(tempDate),
+                    hour: tempDate.getHours(),
+                    minute: tempDate.getMinutes(),
+                  };
 
             return type === "start" ? (
               <div
@@ -71,15 +95,21 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
                 className="drop-down__element"
                 onMouseDown={() => setIsClosable(false)}
                 onClick={() => {
-                  console.log("clicked");
                   handleClickTime(tempDateTime);
                 }}
               >
                 {dateTimeToString(tempDateTime)}
               </div>
             ) : (
-              <div key={v.toString()} className="drop-down__element">
-                {timeIntervalToString(v)}
+              <div
+                key={v.toString()}
+                className="drop-down__element"
+                onMouseDown={() => setIsClosable(false)}
+                onClick={() => {
+                  handleClickTime(startDateTime, v);
+                }}
+              >
+                {dateTimeToString(tempDateTime) + timeIntervalToString(v)}
               </div>
             );
           })}
@@ -87,9 +117,14 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
     ) : null;
 
   return (
-    <div className="drop-down">
+    <div
+      className={
+        dateTimeToString(dateTime).length < 8
+          ? "drop-down"
+          : "drop-down drop-down-expand"
+      }
+    >
       <div
-        ref={ref}
         onClick={handleClickButton}
         className={
           dropdownType === type

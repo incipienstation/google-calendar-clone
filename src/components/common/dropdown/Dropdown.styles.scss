@@ -1,15 +1,19 @@
 .time-picker .drop-down {
-  width: 79.15px;
+  width: fit-content;
   display: flex;
   flex-direction: column;
   overflow: visible;
+  max-width: 79.15px;
+  &-expand{
+    max-width: 86.93px;
+  }
   &__btn {
     padding: 0 10px;
     border-radius: 4px;
+    width: fit-content;
     height: 36px;
-    width: max-content;
     &:hover,
-    &selected {
+    &-selected {
       background-color: rgba(32, 33, 36, 0.039);
     }
   }

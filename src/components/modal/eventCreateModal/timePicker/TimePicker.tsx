@@ -10,17 +10,14 @@ import Dropdown from "../../../common/dropdown/Dropdown";
 import { useEffect, useState } from "react";
 import { setDropdownType } from "../../../../features/timePickerControl/timePickerControlSlice";
 import { useDispatch } from "react-redux";
+import { compareSelectedDate } from "../../../../features/selectedDate/selectedDateSlice";
 
 const TimePicker = () => {
   const { event } = useSelector((state: RootState) => state.selectedEvent);
   const { dateTimeRange } = event!;
   const [startDateTime, endDateTime] = dateTimeRange;
-  const {
-    date: startDate,
-    hour: startHour,
-    minute: startMinute,
-  } = startDateTime;
-  const { date: endDate, hour: endHour, minute: endMinute } = startDateTime;
+  const { date: startDate } = startDateTime;
+  const { date: endDate } = endDateTime;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,8 +32,13 @@ const TimePicker = () => {
         startDate.date
       }일 (${dayList[startDate.day]}요일)`}</div>
       <Dropdown type="start" />
-      <span aria-label=" - " style={{margin: "0 2px"}}>–</span>
+      <span aria-label=" - ">–</span>
       <Dropdown type="end" />
+      {compareSelectedDate(startDate, endDate) !== 0 ? (
+        <div className="time-picker__date">{`${endDate.month}월 ${
+          endDate.date
+        }일 (${dayList[endDate.day]}요일)`}</div>
+      ) : null}
     </div>
   );
 };
