@@ -1,0 +1,97 @@
+@import "react-day-picker/dist/style.css";
+
+#date-picker {
+  width: 256px;
+  height: 100vh;
+  padding: 150px 10px;
+  margin: 0;
+  left: 0;
+  position: fixed;
+  background-color: #fff;
+  z-index: 1000;
+}
+
+:root {
+  --rdp-cell-size: 24px;
+  --rdp-accent-color: #d2e3fc;
+  --rdp-background-color: #d2e3fc;
+  /* Switch to dark colors for dark themes */
+  --rdp-accent-color-dark: #d2e3fc;
+  --rdp-background-color-dark: #180270;
+  /* Outline border for focused elements */
+  --rdp-outline: none;
+  /* Outline border for focused and selected elements */
+  --rdp-outline-selected: none;
+}
+
+.rdp {
+  font-size: 10px;
+  font-weight: 500;
+  &-cell {
+    padding: 4px;
+  }
+  &-caption {
+    margin-bottom: 10px;
+    &_label {
+      color: #3c4043;
+      font-size: 14px;
+    }
+  }
+  &-nav {
+    &_icon {
+      margin: 0 1px;
+      width: 12px;
+      color: #5f6368;
+      fill: #5f6368;
+    }
+    &_button {
+      margin: 0 4px;
+      &:focus {
+        background-color: transparent !important;
+        &:hover {
+          background-color: #f1f3f4 !important;
+        }
+      }
+    }
+  }
+  &-head_cell {
+    color: #70757a;
+  }
+}
+
+.rdp-day_today {
+  color: #fff !important;
+  background-color: #1a73e8 !important;
+  &:hover {
+    background-color: #1967d2 !important;
+  }
+  &:focus :active {
+    color: #fff !important;
+    background-color: #1a73e8 !important;
+  }
+}
+
+.rdp-button:hover:not([aria-disabled="true"]) {
+  background-color: #f1f3f4;
+}
+
+.rdp-button:focus:not([aria-disabled='true']) {
+  color: #185abc;
+  background-color: #d2e3fc;
+  &:hover:not([aria-disabled="true"]) {
+    background-color: #aecbfa;
+  }
+}
+
+.rdp-day_selected:not([aria-disabled='true']) {
+  color: #185abc;
+  background-color: #d2e3fc;
+  &:focus:not([aria-disabled="true"]),
+  :active:not([aria-disabled="true"]) {
+    color: #185abc;
+    background-color: #d2e3fc;
+  }
+  &:hover:not([aria-disabled="true"]) {
+    background-color: #aecbfa;
+  }
+}

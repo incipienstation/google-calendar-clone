@@ -1,0 +1,28 @@
+button:hover {
+  background-color: #eee;
+}
+
+.navbar {
+  height: 64px;
+  &-brand {
+    font-family: "Product Sans", Arial, sans-serif;
+    font-size: 22px;
+    color: #5f6368;
+    padding: 0 110px 0 10px;
+  }
+}
+
+.nav {
+  min-width: 400px;
+  &-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.date-indicator {
+  font-size: 22px;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  margin: 0 10px;
+}

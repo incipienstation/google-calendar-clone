@@ -1,0 +1,143 @@
+$--border: 1px solid lightgray;
+
+.week {
+  &-view {
+    min-width: calc(50px + 9px + 81px * 7 + 8px);
+    // max-width: calc(100vw - 256px);
+    top: 64px;
+    left: 256px;
+    position: fixed;
+  }
+  &-bar {
+    width: calc(100vw - 306px);
+    height: 90px;
+    min-width: calc(9px + 81px * 7 + 8px);
+    padding-right: 8px;
+    padding-left: 9px;
+    border-bottom: $--border;
+  }
+}
+
+.time {
+  &-table {
+    width: calc(100vw - 306px);
+    height: calc(100vh - 160px);
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+  }
+  &-column {
+    width: auto;
+    position: relative;
+  }
+  &-cell {
+    height: 24px;
+    min-width: 81px;
+    border-left: $--border;
+    &-bordered {
+      border-top: $--border;
+    }
+  }
+  &-bar {
+    width: 50px;
+    height: 48px;
+    font-size: 10px;
+    color: #70757a;
+    text-align: right;
+    .text-time {
+      position: relative;
+      top: -6px;
+      right: 5px;
+    }
+  }
+}
+
+.danglings {
+  width: 9px;
+  height: 24px;
+  &-bordered {
+    border-top: $--border;
+  }
+}
+
+.day-display {
+  min-width: 81px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  &-name {
+    font-family: Roboto, "Noto Sans KR", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    &.today {
+      color: #1a73e8;
+    }
+  }
+  &-date {
+    width: 46px;
+    height: 46px;
+    font-family: Google Sans, Roboto, Arial, sans-serif;
+    font-size: 25px;
+    text-align: center;
+    line-height: 46px;
+    border-radius: 50%;
+    &.today {
+      color: #fff;
+      background-color: #1a73e8;
+    }
+    &.before {
+      color: #70757a;
+    }
+    &.after {
+      color: #3c4043;
+    }
+  }
+  .border-fragment {
+    border-left: $--border;
+    width: inherit;
+    bottom: -14px;
+    height: 20px;
+    position: absolute;
+  }
+}
+
+.row-fixed {
+  display: flex;
+  flex-direction: row;
+}
+
+#gmt {
+  width: 50px;
+  height: 90px;
+  z-index: 1000;
+  font-size: 10px;
+  color: #70757a;
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  padding-right: 5px;
+  background-color: #fff;
+}
+
+.event-box {
+  padding: 5px;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 5px;
+  letter-spacing: 0.1px;
+  line-height: 15px;
+  background-color: rgb(3, 155, 229);
+  text-align: start;
+  position: absolute;
+  &-text {
+    overflow: hidden;
+    white-space: nowrap;
+    height: 15px;
+  }
+
+  &:active {
+    width: 100% !important;
+  }
+}

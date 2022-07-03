@@ -1,0 +1,22 @@
+.buttons {
+  display: flex;
+  flex-direction: row;
+  height: 32px;
+  margin: 0px 10px;
+}
+
+.btn-navigation {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-align: center;
+  &:hover {
+    background-color: rgba(32,33,36,0.039);
+    cursor: pointer;
+  }
+}
+
+.material-symbols-outlined {
+  line-height: 32px;
+  color: #5f6368;
+}

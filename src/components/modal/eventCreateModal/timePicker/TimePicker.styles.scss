@@ -1,0 +1,14 @@
+.time-picker {
+  height: 36px;
+  line-height: 36px;
+  overflow: visible;
+  display: flex;
+  margin: 5px 0;
+  &__date {
+    padding: 0 10px;
+    border-radius: 4px;
+    &:hover {
+      background-color: rgba(32, 33, 36, 0.039);
+    }
+  }
+}
