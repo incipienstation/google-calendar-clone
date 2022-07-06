@@ -4,7 +4,6 @@ import {
   parseDateToSelectedDate,
   parseSelectedDateToDate,
 } from "../selectedDate/selectedDateSlice";
-import { DropdownType } from "../timePickerControl/timePickerControlSlice";
 
 const initialState: { event?: Event } = {};
 
@@ -23,22 +22,11 @@ export const selectedEventSlice = createSlice({
       state.event!.title =
         action.payload === "" ? "(제목 없음)" : action.payload;
     },
-    updateSelectedEvent: (
-      state,
-      action: { payload: { startDateTime: DateTime; timeInterval: number } }
-    ) => {
-      const newState = { ...state };
-      newState.event!.dateTimeRange[0] = action.payload.startDateTime;
-      const res = addTimeInterval(
-        action.payload.startDateTime,
-        action.payload.timeInterval
-      );
-      newState.event!.dateTimeRange[1] = {
-        date: parseDateToSelectedDate(res),
-        hour: res.getHours(),
-        minute: res.getMinutes(),
-      };
-      state = newState;
+    setSelectedEventStartDate: (state, action: { payload: DateTime }) => {
+      state.event!.dateTimeRange[0] = action.payload;
+    },
+    setSelectedEventEndDate: (state, action: { payload: DateTime }) => {
+      state.event!.dateTimeRange[1] = action.payload;
     },
   },
 });
@@ -47,7 +35,8 @@ export const {
   setSelectedEvent,
   deleteSelectedEvent,
   setSelectedEventTitle,
-  updateSelectedEvent,
+  setSelectedEventStartDate,
+  setSelectedEventEndDate,
 } = selectedEventSlice.actions;
 
 export default selectedEventSlice.reducer;
@@ -55,10 +44,14 @@ export default selectedEventSlice.reducer;
 export const addTimeInterval = (
   dateTime: DateTime,
   timeInterval: number
-): Date => {
+): DateTime => {
   const res: Date = parseSelectedDateToDate(dateTime.date);
   res.setHours(dateTime.hour);
   res.setMinutes(dateTime.minute);
   res.setMinutes(res.getMinutes() + timeInterval);
-  return res;
+  return {
+    date: parseDateToSelectedDate(res),
+    hour: res.getHours(),
+    minute: res.getMinutes(),
+  };
 };

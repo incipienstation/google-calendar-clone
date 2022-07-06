@@ -11,18 +11,14 @@ import {
   closeDropdowns,
   DropdownType,
   setDropdownType,
+  setTimeInterval,
 } from "../../../features/timePickerControl/timePickerControlSlice";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import {
   addTimeInterval,
-  setSelectedEvent,
-  updateSelectedEvent,
+  setSelectedEventEndDate,
+  setSelectedEventStartDate,
 } from "../../../features/selectedEvent/selectedEventSlice";
-import {
-  parseDateToSelectedDate,
-  parseSelectedDateToDate,
-  SelectedDate,
-} from "../../../features/selectedDate/selectedDateSlice";
 
 const Dropdown = ({ type }: { type: DropdownType }) => {
   const { dropdownType } = useSelector(
@@ -33,13 +29,12 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
   const dateTime = type === "start" ? startDateTime : endDateTime;
   const dispatch = useDispatch();
   const ref: RefObject<HTMLDivElement> = useRef(null);
-  const [isClosable, setIsClosable] = useState(true);
-  const [timeInterval, setTimeInterval] = useState(60);
+  const { timeInterval } = useSelector(
+    (state: RootState) => state.timePickerControl
+  );
 
   const handleClickOutside = () => {
-    if (isClosable) {
-      dispatch(closeDropdowns());
-    }
+    dispatch(closeDropdowns());
   };
 
   useOnClickOutside(ref, handleClickOutside);
@@ -48,17 +43,18 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
     dispatch(setDropdownType(type));
   };
 
-  const handleClickTime = (dateTime: DateTime, minutes?: number) => {
-    if (minutes !== undefined) {
-      setTimeInterval(minutes);
-    }
-    dispatch(
-      updateSelectedEvent({
-        startDateTime: dateTime,
-        timeInterval: minutes ?? timeInterval,
-      })
-    );
-    setIsClosable(true);
+  const handleClickStartTime = (startDateTime: DateTime) => {
+    console.log(timeInterval);
+    const endDateTime: DateTime = addTimeInterval(startDateTime, timeInterval);
+    dispatch(setSelectedEventStartDate(startDateTime));
+    dispatch(setSelectedEventEndDate(endDateTime));
+    dispatch(closeDropdowns());
+  };
+
+  const handleClickEndTime = (endDateTime: DateTime, timeInterval: number) => {
+    dispatch(setTimeInterval(timeInterval));
+    console.log(timeInterval);
+    dispatch(setSelectedEventEndDate(endDateTime));
     dispatch(closeDropdowns());
   };
 
@@ -68,48 +64,33 @@ const Dropdown = ({ type }: { type: DropdownType }) => {
 
   const dropdownBuilder =
     dropdownType === type ? (
-      <div ref={ref} className="drop-down__body" >
+      <div ref={ref} className="drop-down__body">
         {Array(type === "start" ? 4 * 24 : 4 + 2 * 23)
           .fill(0)
           .map((v, i) =>
             type === "start" ? 15 * i : i < 4 ? 15 * i : 60 + 30 * (i - 4)
           )
           .map((v) => {
-            const tempDate: Date = addTimeInterval(startDateTime, v)
-            const tempDateTime: DateTime =
+            const tempDateTime: DateTime = addTimeInterval(
               type === "start"
-                ? {
-                    date: dateTime.date,
-                    hour: Math.floor(v / 60),
-                    minute: v % 60,
-                  }
-                : {
-                    date: parseDateToSelectedDate(tempDate),
-                    hour: tempDate.getHours(),
-                    minute: tempDate.getMinutes(),
-                  };
+                ? { date: startDateTime.date, hour: 0, minute: 0 }
+                : startDateTime,
+              v
+            );
 
-            return type === "start" ? (
+            return (
               <div
                 key={v.toString()}
                 className="drop-down__element"
-                onMouseDown={() => setIsClosable(false)}
                 onClick={() => {
-                  handleClickTime(tempDateTime);
+                  type === "start"
+                    ? handleClickStartTime(tempDateTime)
+                    : handleClickEndTime(tempDateTime, v);
                 }}
               >
-                {dateTimeToString(tempDateTime)}
-              </div>
-            ) : (
-              <div
-                key={v.toString()}
-                className="drop-down__element"
-                onMouseDown={() => setIsClosable(false)}
-                onClick={() => {
-                  handleClickTime(startDateTime, v);
-                }}
-              >
-                {dateTimeToString(tempDateTime) + timeIntervalToString(v)}
+                {type === "start"
+                  ? dateTimeToString(tempDateTime)
+                  : dateTimeToString(tempDateTime) + timeIntervalToString(v)}
               </div>
             );
           })}

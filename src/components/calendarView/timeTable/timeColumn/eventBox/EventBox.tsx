@@ -1,4 +1,3 @@
-import { MouseEventHandler, SyntheticEvent, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {
@@ -21,7 +20,7 @@ const EventBox = ({
   event: Event;
   range: { start: number; end: number };
 }) => {
-  const baseWidth = "calc(100vw - 306px)";
+  // const baseWidth = "calc(100vw - 306px)";
   const dispatch = useDispatch();
   const modalControl = useSelector((state: RootState) => state.modalControl);
 

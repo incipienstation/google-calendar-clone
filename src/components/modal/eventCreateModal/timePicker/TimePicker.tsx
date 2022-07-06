@@ -8,7 +8,7 @@ import {
 import { RootState } from "../../../../features/store";
 import Dropdown from "../../../common/dropdown/Dropdown";
 import { useEffect, useState } from "react";
-import { setDropdownType } from "../../../../features/timePickerControl/timePickerControlSlice";
+import { resetTimeInterval, setDropdownType } from "../../../../features/timePickerControl/timePickerControlSlice";
 import { useDispatch } from "react-redux";
 import { compareSelectedDate } from "../../../../features/selectedDate/selectedDateSlice";
 
@@ -21,6 +21,7 @@ const TimePicker = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(resetTimeInterval())
     return () => {
       dispatch(setDropdownType(undefined));
     };
