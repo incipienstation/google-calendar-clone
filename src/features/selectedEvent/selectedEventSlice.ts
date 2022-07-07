@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DateTime, Event } from "../eventData/eventDataSlice";
 import {
-  parseDateToSelectedDate,
-  parseSelectedDateToDate,
-} from "../selectedDate/selectedDateSlice";
+  DateTime,
+  Event,
+  parseDateTimeToDate,
+  parseDateToDateTime,
+  RepeatType,
+} from "../eventData/eventDataSlice";
 
-const initialState: { event?: Event } = {};
+const initialState: { event: Event | null } = { event: null };
 
 export const selectedEventSlice = createSlice({
   name: "selectedEvent",
@@ -13,10 +15,9 @@ export const selectedEventSlice = createSlice({
   reducers: {
     setSelectedEvent: (state, action: { payload: { event: Event } }) => {
       state.event = action.payload.event;
-      console.log(state.event);
     },
     deleteSelectedEvent: (state) => {
-      state.event = undefined;
+      state.event = null;
     },
     setSelectedEventTitle: (state, action: { payload: string }) => {
       state.event!.title =
@@ -28,6 +29,9 @@ export const selectedEventSlice = createSlice({
     setSelectedEventEndDate: (state, action: { payload: DateTime }) => {
       state.event!.dateTimeRange[1] = action.payload;
     },
+    setRepeatType: (state, action: { payload: RepeatType | undefined }) => {
+      state.event!.repeat = action.payload;
+    },
   },
 });
 
@@ -37,6 +41,7 @@ export const {
   setSelectedEventTitle,
   setSelectedEventStartDate,
   setSelectedEventEndDate,
+  setRepeatType,
 } = selectedEventSlice.actions;
 
 export default selectedEventSlice.reducer;
@@ -45,13 +50,21 @@ export const addTimeInterval = (
   dateTime: DateTime,
   timeInterval: number
 ): DateTime => {
-  const res: Date = parseSelectedDateToDate(dateTime.date);
-  res.setHours(dateTime.hour);
-  res.setMinutes(dateTime.minute);
+  const res: Date = parseDateTimeToDate(dateTime);
   res.setMinutes(res.getMinutes() + timeInterval);
-  return {
-    date: parseDateToSelectedDate(res),
-    hour: res.getHours(),
-    minute: res.getMinutes(),
-  };
+  return parseDateToDateTime(res);
+};
+
+export const getTimeInterval = (
+  startDateTime: DateTime,
+  endDateTime: DateTime
+): number => {
+  return Math.abs(
+    Math.round(
+      (parseDateTimeToDate(endDateTime).getTime() -
+        parseDateTimeToDate(startDateTime).getTime()) /
+        1000 /
+        60
+    )
+  );
 };

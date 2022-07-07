@@ -6,11 +6,12 @@ import {
   dayList,
 } from "../../../../features/eventData/eventDataSlice";
 import { RootState } from "../../../../features/store";
-import Dropdown from "../../../common/dropdown/Dropdown";
+import TimePickerDropdown from "../../../common/dropdown/TimePickerDropdown";
 import { useEffect, useState } from "react";
-import { resetTimeInterval, setDropdownType } from "../../../../features/timePickerControl/timePickerControlSlice";
+import { resetTimeInterval } from "../../../../features/timePickerControl/timePickerControlSlice";
 import { useDispatch } from "react-redux";
 import { compareSelectedDate } from "../../../../features/selectedDate/selectedDateSlice";
+import RepeatTypeDropdown from "../../../common/dropdown/RepeatTypeDropdown";
 
 const TimePicker = () => {
   const { event } = useSelector((state: RootState) => state.selectedEvent);
@@ -21,10 +22,7 @@ const TimePicker = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(resetTimeInterval())
-    return () => {
-      dispatch(setDropdownType(undefined));
-    };
+    dispatch(resetTimeInterval());
   }, []);
 
   return (
@@ -32,9 +30,9 @@ const TimePicker = () => {
       <div className="time-picker__date">{`${startDate.month}월 ${
         startDate.date
       }일 (${dayList[startDate.day]}요일)`}</div>
-      <Dropdown type="start" />
+      <TimePickerDropdown type="start-time" />
       <span aria-label=" - ">–</span>
-      <Dropdown type="end" />
+      <TimePickerDropdown type="end-time" />
       {compareSelectedDate(startDate, endDate) !== 0 ? (
         <div className="time-picker__date">{`${endDate.month}월 ${
           endDate.date

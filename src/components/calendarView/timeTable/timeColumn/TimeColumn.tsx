@@ -1,21 +1,31 @@
-import { ReactNode } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Event } from "../../../../features/eventData/eventDataSlice";
 import {
   compareSelectedDate,
   SelectedDate,
-  selectedDateEquals,
 } from "../../../../features/selectedDate/selectedDateSlice";
+import {
+  addTimeInterval,
+  getTimeInterval,
+} from "../../../../features/selectedEvent/selectedEventSlice";
 import { RootState } from "../../../../features/store";
 import EventBox from "./eventBox/EventBox";
 import TimeCell from "./timeCell/TimeCell";
 
-const TimeColumn = ({ day }: { day: number }) => {
+const TimeColumn = ({
+  day,
+  eventList,
+}: {
+  day: number;
+  eventList: Event[];
+}) => {
   const selectedDate = useSelector((state: RootState) => state.selectedDate);
-  const currWeek = selectedDate.currWeek!;
-  const { eventData } = useSelector((state: RootState) => state.eventData);
-  const selectedEvent = useSelector((state: RootState) => state.selectedEvent);
-  const dispatch = useDispatch();
+  const currDate: SelectedDate = selectedDate
+    .currWeek!.filter((date) => date.day === day)
+    .at(0)!;
+  const { event: selectedEvent } = useSelector(
+    (state: RootState) => state.selectedEvent
+  );
 
   const columnBuilder = Array(48)
     .fill(0)
@@ -33,10 +43,6 @@ const TimeColumn = ({ day }: { day: number }) => {
       );
     });
 
-  const currDate: SelectedDate = currWeek
-    .filter((date) => date.day === day)
-    .at(0)!;
-
   const getRange = (event: Event) => {
     const start: number =
       compareSelectedDate(event.dateTimeRange[0].date, currDate) < 0
@@ -51,7 +57,17 @@ const TimeColumn = ({ day }: { day: number }) => {
     return { start: start, end: end };
   };
 
-  const eventBoxBuilder = eventData
+  const newEvent: Event | null =
+    selectedEvent !== null &&
+    (selectedEvent.isNew ?? false) &&
+    compareSelectedDate(selectedEvent.dateTimeRange[0].date, currDate) <= 0 &&
+    compareSelectedDate(selectedEvent.dateTimeRange[1].date, currDate) >= 0
+      ? selectedEvent
+      : null;
+
+  const eventBoxBuilder = (
+    newEvent !== null ? [...eventList, newEvent] : eventList
+  )
     .filter(
       (event) =>
         compareSelectedDate(event.dateTimeRange[0].date, currDate) <= 0 &&
@@ -59,34 +75,16 @@ const TimeColumn = ({ day }: { day: number }) => {
     )
     .map((event) => (
       <EventBox
-        key={event.id + currDate.day}
+        key={event.id + event.dateTimeRange[0].date.date}
         event={event}
         range={getRange(event)}
       />
     ));
 
-  const newEventBoxBuilder: ReactNode =
-    selectedEvent.event !== undefined &&
-    (selectedEvent.event.isNew ?? false) &&
-    (selectedDateEquals(selectedEvent.event.dateTimeRange[0].date, currDate) ||
-      selectedDateEquals(
-        selectedEvent.event.dateTimeRange[1].date,
-        currDate
-      )) ? (
-      <EventBox
-        key={selectedEvent.event.id}
-        event={selectedEvent.event}
-        range={getRange(selectedEvent.event)}
-      />
-    ) : null;
-
   return (
     <div className="time-column col g-0">
       {columnBuilder}
-      <div>
-        {eventBoxBuilder}
-        {newEventBoxBuilder}
-      </div>
+      {eventBoxBuilder}
     </div>
   );
 };

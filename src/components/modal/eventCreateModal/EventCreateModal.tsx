@@ -3,23 +3,17 @@ import TextField from "../../common/textField/TextField";
 import TimePicker from "./timePicker/TimePicker";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../features/store";
-import {
-  closeModal,
-  deleteEventId,
-} from "../../../features/modalControl/modalControlSlice";
+import { closeModal } from "../../../features/modalControl/modalControlSlice";
 import { createEvent } from "../../../features/eventData/eventDataSlice";
 import {
   deleteSelectedEvent,
+  setRepeatType,
   setSelectedEventTitle,
 } from "../../../features/selectedEvent/selectedEventSlice";
-import {
-  ChangeEventHandler,
-  KeyboardEventHandler,
-  useEffect,
-  useRef,
-} from "react";
+import { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import ModalCloseButton from "../../common/button/ModalCloseButton";
+import RepeatTypeDropdown from "../../common/dropdown/RepeatTypeDropdown";
 
 const EventCreateModal = () => {
   const { event } = useSelector((state: RootState) => state.selectedEvent);
@@ -75,6 +69,7 @@ const EventCreateModal = () => {
       <div className="my-modal-body my-modal-body-create">
         <TextField placeholder="제목 추가" onChange={handleChange} />
         <TimePicker />
+        <RepeatTypeDropdown />
         <button
           className="btn btn-primary"
           onClick={handleClickSave}

@@ -1,10 +1,16 @@
-.time-picker .drop-down {
+.drop-down {
   width: fit-content;
   display: flex;
   flex-direction: column;
   overflow: visible;
   max-width: 79.15px;
-  &-expand{
+  &-repeat-type {
+    height: 36px;
+    font-size: 14px;
+    line-height: 36px;
+    max-width: max-content;
+  }
+  &-expand {
     max-width: 86.93px;
   }
   &__btn {

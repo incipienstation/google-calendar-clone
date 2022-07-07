@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { SelectedDate } from "../selectedDate/selectedDateSlice";
+import {
+  parseDateToSelectedDate,
+  parseSelectedDateToDate,
+  SelectedDate,
+} from "../selectedDate/selectedDateSlice";
 
 export type DateTime = {
   date: SelectedDate;
@@ -9,11 +13,18 @@ export type DateTime = {
 
 export type DateTimeRange = [DateTime, DateTime];
 
+export type RepeatType =
+  | "every-day"
+  | "every-week"
+  | "every-month"
+  | "every-year";
+
 export type Event = {
   id: string;
   title: string;
   dateTimeRange: DateTimeRange;
   isNew?: boolean;
+  repeat?: RepeatType;
 };
 
 const initialState: { eventData: Event[] } = {
@@ -48,6 +59,18 @@ export const eventDataSlice = createSlice({
 export const { createEvent, deleteEvent } = eventDataSlice.actions;
 
 export default eventDataSlice.reducer;
+
+export const parseDateTimeToDate = (dateTime: DateTime): Date => {
+  const res: Date = parseSelectedDateToDate(dateTime.date);
+  res.setHours(dateTime.hour);
+  res.setMinutes(dateTime.minute);
+  return res;
+};
+
+export const parseDateToDateTime = (date: Date): DateTime => {
+  const res: SelectedDate = parseDateToSelectedDate(date);
+  return { date: res, hour: date.getHours(), minute: date.getMinutes() };
+};
 
 export const dateTimeToString = (dateTime: DateTime): string => {
   const type: string =

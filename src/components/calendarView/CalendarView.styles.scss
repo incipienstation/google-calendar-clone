@@ -9,7 +9,7 @@ $--border: 1px solid lightgray;
     position: fixed;
   }
   &-bar {
-    width: calc(100vw - 306px);
+    width: calc(100vw - 305px);
     height: 90px;
     min-width: calc(9px + 81px * 7 + 8px);
     padding-right: 8px;
@@ -20,7 +20,7 @@ $--border: 1px solid lightgray;
 
 .time {
   &-table {
-    width: calc(100vw - 306px);
+    width: calc(100vw - 305px);
     height: calc(100vh - 160px);
     overflow: auto;
     display: flex;

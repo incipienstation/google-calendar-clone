@@ -67,6 +67,12 @@ export const parseDateToSelectedDate = (date: Date): SelectedDate => ({
   day: date.getDay(),
 });
 
+export const getYesterday = (today: SelectedDate) => {
+  const res: Date = parseSelectedDateToDate(today)
+  res.setDate(res.getDate() - 1)
+  return parseDateToSelectedDate(res)
+}
+
 export const selectedDateEquals = (
   o1: SelectedDate,
   o2: SelectedDate
@@ -83,12 +89,12 @@ export const compareSelectedDate = (
   const startDate = parseInt(
     o1.year.toString() +
       o1.month.toString().padStart(2, "0") +
-      o1.date.toString()
+      o1.date.toString().padStart(2, "0")
   );
   const endDate = parseInt(
     o2.year.toString() +
       o2.month.toString().padStart(2, "0") +
-      o2.date.toString()
+      o2.date.toString().padStart(2, "0")
   );
   return startDate < endDate ? -1 : startDate === endDate ? 0 : 1;
 };
