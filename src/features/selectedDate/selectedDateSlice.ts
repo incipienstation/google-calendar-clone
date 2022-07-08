@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DateTime } from "../eventData/eventDataSlice";
 
 export type SelectedDate = {
   year: number;
@@ -68,19 +67,10 @@ export const parseDateToSelectedDate = (date: Date): SelectedDate => ({
 });
 
 export const getYesterday = (today: SelectedDate) => {
-  const res: Date = parseSelectedDateToDate(today)
-  res.setDate(res.getDate() - 1)
-  return parseDateToSelectedDate(res)
-}
-
-export const selectedDateEquals = (
-  o1: SelectedDate,
-  o2: SelectedDate
-): boolean =>
-  o1.year === o2.year &&
-  o1.month === o2.month &&
-  o1.date === o2.date &&
-  o1.day === o2.day;
+  const res: Date = parseSelectedDateToDate(today);
+  res.setDate(res.getDate() - 1);
+  return parseDateToSelectedDate(res);
+};
 
 export const compareSelectedDate = (
   o1: SelectedDate,

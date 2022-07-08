@@ -12,7 +12,7 @@ import { deleteSelectedEvent } from "../../../features/selectedEvent/selectedEve
 import { RootState } from "../../../features/store";
 import useOnClickOutside from "../../../hooks/useOnClickOutside";
 import ModalCloseButton from "../../common/button/ModalCloseButton";
-import { selectedDateEquals } from "../../../features/selectedDate/selectedDateSlice";
+import { compareSelectedDate } from "../../../features/selectedDate/selectedDateSlice";
 
 const EventDeleteModal = () => {
   const { event } = useSelector((state: RootState) => state.selectedEvent);
@@ -55,7 +55,7 @@ const EventDeleteModal = () => {
   const eventIndicatorBuilder = () => {
     const startDateTimeString = dateTimeToString(startDateTime);
     const endDateTimeString = dateTimeToString(endDateTime);
-    const res = selectedDateEquals(startDate, endDate) ? (
+    const res = compareSelectedDate(startDate, endDate) === 0 ? (
       <>
         <div>{`${startDate.month}월 ${startDate.date}일 (${
           dayList[startDate.day]

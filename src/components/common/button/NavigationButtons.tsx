@@ -13,7 +13,7 @@ const NavigationButtons = ({ type }: { type: NavigationType }) => {
   const selectedDate = useSelector((state: RootState) => state.selectedDate);
   const dispatch = useDispatch();
 
-  const handleClick = (type: string, direction: string) => {
+  const handleClick = (type: string, direction: "right" | "left") => {
     const offset: number = direction === "right" ? 7 : -7;
     const parsedDate = parseSelectedDateToDate(selectedDate);
     parsedDate.setDate(parsedDate.getDate() + offset);

@@ -1,13 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Event } from "../../../../features/eventData/eventDataSlice";
 import {
   compareSelectedDate,
   SelectedDate,
 } from "../../../../features/selectedDate/selectedDateSlice";
-import {
-  addTimeInterval,
-  getTimeInterval,
-} from "../../../../features/selectedEvent/selectedEventSlice";
 import { RootState } from "../../../../features/store";
 import EventBox from "./eventBox/EventBox";
 import TimeCell from "./timeCell/TimeCell";

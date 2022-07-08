@@ -9,7 +9,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 const today = new Date();
 
-// localStorage.clear()s
+// localStorage.clear()
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -7,7 +7,6 @@ import { closeModal } from "../../../features/modalControl/modalControlSlice";
 import { createEvent } from "../../../features/eventData/eventDataSlice";
 import {
   deleteSelectedEvent,
-  setRepeatType,
   setSelectedEventTitle,
 } from "../../../features/selectedEvent/selectedEventSlice";
 import { ChangeEventHandler, KeyboardEventHandler, useRef } from "react";

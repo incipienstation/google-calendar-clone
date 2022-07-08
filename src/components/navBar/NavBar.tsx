@@ -1,6 +1,3 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../features/store";
 import NavigationButtons from "../common/button/NavigationButtons";
 import DateIndicator from "./dateIndicator/DateIndicator";
 import "./NavBar.styles.scss";

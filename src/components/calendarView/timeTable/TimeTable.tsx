@@ -1,6 +1,5 @@
 import { UIEvent } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setScrollPoint } from "../../../features/scrollPoint/scrollPointSlice";
 import {
   compareSelectedDate,
@@ -101,7 +100,7 @@ const TimeTable = () => {
           {danglingBuilder}
         </div>
       ) : (
-        <TimeColumn key={i.toString()} eventList={eventList} day={i - 1} />
+        <TimeColumn key={i} eventList={eventList} day={i - 1} />
       );
     });
 
